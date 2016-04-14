@@ -57,8 +57,8 @@ classdef RungeKutta
         
         function [solp, solkhi] = solve_adjoint_equation(obj, solu)
             solp = zeros(obj.N+2, obj.d, obj.grid.n+1);
-            solp(:, :, obj.grid.n+1) = -Gxphi(obj.solx(:, :, obj.grid.n+1));
-%             solp(:, :, obj.grid.n+1) = Gxphi(obj.solx(:, :, obj.grid.n+1)); % haager   
+            solp(:, :, obj.grid.n+1) = -Gxphi(obj.solx(:, :, obj.grid.n+1), obj.N, obj.d);
+%             solp(:, :, obj.grid.n+1) = Gxphi(obj.solx(:, :, obj.grid.n+1), obj.N, obj.d); % Haager   
             solkhi = zeros(obj.N+2, obj.d, obj.grid.n, obj.s);
 
            for k=obj.grid.n:-1:1
@@ -67,10 +67,10 @@ classdef RungeKutta
                    solkhi(:, :, k, i) = solp(:, :, k+1);
                    for j=1:obj.s
                        if i>j
-                        solkhi(:, :, k, i) = solkhi(:, :, k, i) + obj.grid.h*obj.A(j, i)*obj.b(j)/obj.b(i)*solkhi(:, :, k, j)*Gxf(obj.soly(:, :, k, j), solu(:, :, k, j),  obj.N, obj.d);
+                        solkhi(:, :, k, i) = solkhi(:, :, k, i) + obj.grid.h*obj.A(j, i)*obj.b(j)/obj.b(i)*mult(solkhi(:, :, k, j), Gxf(obj.soly(:, :, k, j), solu(:, :, k, j),  obj.N, obj.d), obj.N, obj.d);
                        end
                    end
-                   solp(:, :, k) = solp(:, :, k) + obj.grid.h*obj.b(i)*solkhi(:, :, k, i)*Gxf(obj.soly(:, :, k, i), solu(:, :, k, i),  obj.N, obj.d);
+                   solp(:, :, k) = solp(:, :, k) + obj.grid.h*obj.b(i)*mult(solkhi(:, :, k, i), Gxf(obj.soly(:, :, k, i), solu(:, :, k, i),  obj.N, obj.d), obj.N, obj.d);
                 end
             end
         end
@@ -84,8 +84,8 @@ classdef RungeKutta
            res = zeros(obj.N+2, obj.d, obj.grid.n, obj.s);
            for k=1:obj.grid.n
                for i=1:obj.s
-                   res(:, :, k, i) = -obj.grid.h*obj.b(i)*obj.solkhi(:, :, k, i)*Guf(obj.soly(:, :, k, i), solu(:, :, k, i), obj.N, obj.d);
-%                    res(:, :, k, i) = -obj.solkhi(:, :, k, i)*Guf(obj.soly(:, :, k, i), solu(:, :, k, i), obj.N, obj.d);  % as in Haager      
+                   res(:, :, k, i) = -obj.grid.h*obj.b(i)*mult(obj.solkhi(:, :, k, i), Guf(obj.soly(:, :, k, i), solu(:, :, k, i), obj.N, obj.d), obj.N, obj.d);
+%                    res(:, :, k, i) = -mult(obj.solkhi(:, :, k, i), Guf(obj.soly(:, :, k, i), solu(:, :, k, i), obj.N, obj.d), obj.N, obj.d);  % Haager      
                end
            end
         end

@@ -1,7 +1,7 @@
 N=0;
 d=1;
 
-grid = Grid(1, 100);
+grid = Grid(1, 80);
 
 x0 = ones(N+2,d);
 x0(N+2, 1) = 0;
@@ -34,5 +34,9 @@ for i=1:grid.n
 end
 
 [solx, soly] = rk.solve_forward_equation(solu);
+% StateL2Error(solx, grid)
 
-StateL2Error(solx, grid)
+rk = rk.solve_optimality_system(solu);
+
+normsolu(rk.g_u(solu), N, d, grid)
+
