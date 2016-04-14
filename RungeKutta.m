@@ -47,31 +47,30 @@ classdef RungeKutta
                    soly(:, :, k, i) = solx(:, :, k);
                    for j=1:obj.s
                        if i>j
-                        soly(:, :, k, i) = soly(:, :, k, i) + obj.grid.h*obj.A(i, j)*f(soly(:, :, k, j), solu(:, k, j));
+                        soly(:, :, k, i) = soly(:, :, k, i) + obj.grid.h*obj.A(i, j)*f(soly(:, :, k, j), solu(:, :, k, j),  obj.N, obj.d);
                        end
                    end
-                   solx(:, :, k+1) = solx(:, :, k+1) + obj.grid.h*obj.b(i)*f(soly(:, :, k, i), solu(:, k, i));
+                   solx(:, :, k+1) = solx(:, :, k+1) + obj.grid.h*obj.b(i)*f(soly(:, :, k, i), solu(:, :, k, i),  obj.N, obj.d);
                 end
             end
         end
         
         function [solp, solkhi] = solve_adjoint_equation(obj, solu)
             solp = zeros(obj.N+2, obj.d, obj.grid.n+1);
-%             solp(:, :, obj.grid.n+1) = -Gphi(obj.solx(:, :, obj.grid.n+1));
-%             solp(:, :, obj.grid.n+1) = Gphi(obj.solx(:, :, obj.grid.n+1));
+            solp(:, :, obj.grid.n+1) = -Gxphi(obj.solx(:, :, obj.grid.n+1));
+%             solp(:, :, obj.grid.n+1) = Gxphi(obj.solx(:, :, obj.grid.n+1)); % haager   
             solkhi = zeros(obj.N+2, obj.d, obj.grid.n, obj.s);
 
-            
-            for k=obj.grid.n:-1:1
+           for k=obj.grid.n:-1:1
                 solp(:, :, k) = solp(:, :, k+1);
                 for i=1:obj.s
                    solkhi(:, :, k, i) = solp(:, :, k+1);
                    for j=1:obj.s
                        if i>j
-%                         solkhi(:, :, k, i) = solkhi(:, :, k, i) + obj.grid.h*obj.A(j, i)*obj.b(j)/obj.b(i)*solkhi(:, :, k, j)*Gxf(obj.soly(:, :, k, j), solu(:, k, j));
+                        solkhi(:, :, k, i) = solkhi(:, :, k, i) + obj.grid.h*obj.A(j, i)*obj.b(j)/obj.b(i)*solkhi(:, :, k, j)*Gxf(obj.soly(:, :, k, j), solu(:, :, k, j),  obj.N, obj.d);
                        end
                    end
-%                    solp(:, :, k) = solp(:, :, k) + obj.grid.h*obj.b(i)*solkhi(:, :, k, i)*Gxf(obj.soly(:, :, k, i), solu(:, k, i));
+                   solp(:, :, k) = solp(:, :, k) + obj.grid.h*obj.b(i)*solkhi(:, :, k, i)*Gxf(obj.soly(:, :, k, i), solu(:, :, k, i),  obj.N, obj.d);
                 end
             end
         end
@@ -82,11 +81,11 @@ classdef RungeKutta
         end
         
         function res = g_u(obj, solu)
-           res = zeros(obj.d, obj.grid.n, obj.s);
+           res = zeros(obj.N+2, obj.d, obj.grid.n, obj.s);
            for k=1:obj.grid.n
                for i=1:obj.s
-%                    res(:, k, i) = -obj.grid.h*obj.b(i)*obj.solkhi(:, :, k, i)*Guf(obj.soly(:, :, k, i), solu(:, k, i));
-%                    res(:, k, i) = -obj.solkhi(:, :, k, i)*Guf(obj.soly(:, :, k, i), solu(:, k, i));  % as in Haager      
+                   res(:, :, k, i) = -obj.grid.h*obj.b(i)*obj.solkhi(:, :, k, i)*Guf(obj.soly(:, :, k, i), solu(:, :, k, i), obj.N, obj.d);
+%                    res(:, :, k, i) = -obj.solkhi(:, :, k, i)*Guf(obj.soly(:, :, k, i), solu(:, :, k, i), obj.N, obj.d);  % as in Haager      
                end
            end
         end

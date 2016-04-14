@@ -13,7 +13,7 @@ classdef Grid
             obj.T = T;
             obj.n = n;
             obj.h = T/n;
-            obj.t = 0:h:T;
+            obj.t = 0:obj.h:T;
         end
     end
     
