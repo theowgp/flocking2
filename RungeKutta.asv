@@ -67,8 +67,8 @@ classdef RungeKutta
                 for i=obj.s:-1:1    
                    solkhi(:, :, k, i) = solp(:, :, k+1);
                    for j=1:obj.s
-%                        if i>j
-                       if j>i
+                       if i>j
+%                        if j>i
 
                         solkhi(:, :, k, i) = solkhi(:, :, k, i) + obj.grid.h*obj.A(j, i)*obj.b(j)/obj.b(i)*mult(solkhi(:, :, k, j), Gxf(obj.soly(:, :, k, j), solu(:, :, k, j),  obj.N, obj.d), obj.N, obj.d);
                        end

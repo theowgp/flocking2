@@ -1,7 +1,7 @@
 N=0;
 d=1;
 
-grid = Grid(1, 80);
+grid = Grid(1, 1000);
 
 x0 = ones(N+2,d);
 x0(N+2, 1) = 0;
