@@ -17,6 +17,8 @@ classdef RungeKutta
     end
     
     methods
+        
+        
         function obj = RungeKutta(grid, A, b, s, x0, N, d)
             obj.grid = grid;
             obj.A = A;
@@ -34,6 +36,9 @@ classdef RungeKutta
 %             obj.solp(:, :, 1) = zeros(N, d, grid.n+1);
 %             obj.solkhi = zeros(N, d, grid.n, s);
         end
+        
+        
+        
         
         function [solx, soly] = solve_forward_equation(obj, solu)
             solx = zeros(obj.N+2, obj.d, obj.grid.n+1);
@@ -54,6 +59,10 @@ classdef RungeKutta
                 end
             end
         end
+        
+        
+        
+        
         
         function [solp, solkhi] = solve_adjoint_equation(obj, solu)
             solp = zeros(obj.N+2, obj.d, obj.grid.n+1);
@@ -78,10 +87,20 @@ classdef RungeKutta
             end
         end
         
+        
+        
+        
+        
+        
         function obj = solve_optimality_system(obj, solu)
             [obj.solx, obj.soly] = obj.solve_forward_equation(solu);
             [obj.solp, obj.solkhi] = obj.solve_adjoint_equation(solu);
         end
+        
+        
+        
+        
+        
         
         function res = g_u(obj, solu)
            res = zeros(obj.N+2, obj.d, obj.grid.n, obj.s);
