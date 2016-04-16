@@ -10,7 +10,15 @@ while phi(solxA(:, :, grid.n+1), grid.T, N, d)> phi(rk.solx(:, :, grid.n+1), gri
     [solxA, solyA] = rk.solve_forward_equation(solu - s*g);
     kA = kA +1;
 end
-kA
+kA;
+
+
+% %PLOT THE TRAJECTORY OF THE LEADER
+% for i=1:N+1
+%     plot(reshape(solxA(i,1,:), grid.n+1, 1), reshape(solxA(i,2,:), grid.n+1, 1));
+%     %plot(solx(i,1,:), solx(i,2,:));
+%     hold all
+% end
 
 res = s;
 end

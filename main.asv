@@ -4,19 +4,17 @@ N=0;
 d=2;
 
 global B nu alpha beta;
-
 alpha = 1;
 beta = 1.5;
-nu = 0.1;
-
+nu = 0.5;
 B = zeros(d, d, 2*N+3, 2*N+3);
 B(:, :, N+2, N+2) = eye(d, d);
 
 grid = Grid(1, 10);
 
 X0 = zeros(2*N+3, d);
-X0(2,1) = -0.2;
-X0(2,2) = -0.5;
+X0(2,1)=-0.2;
+X0(2,2)=-0.2;
 
 
 

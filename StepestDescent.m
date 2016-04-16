@@ -16,9 +16,9 @@ while normsolu(g, N, d, grid)>eps && kLS<limitLS
     normsolu(g, N, d, grid);
     phi(rk.solx(:, :, grid.n+1), grid.T, N, d);
 end
-Gradient = normsolu(g, N, d, grid);
-Phi = phi(rk.solx, N, d, grid);
-kLS;
+Gradient = normsolu(g, N, d, grid)
+Phi = phi(rk.solx(:, :, grid.n+1), grid.T, N, d)
+kLS
 
 solx = rk.solx;
 solu;
