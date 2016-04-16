@@ -1,12 +1,18 @@
-function res = f(x, u, N, d)
-res = zeros(N+2, d);
+function res = f(X, u, N, d)
+x = X(1:N+1, :);
+v = X(N+2:2*N+2, :);
+xbar = X(2*N+3, 1);
 
-res(1, :) = 0.5*x(1, :) + u(1, :); 
 
-for i=2:N+1
-    res(i,:) = 0.5*x(i, :);
-end
+global nu B;
 
-res(N+2, 1) = 0.5*(2*norm(x(1, :))^2 + norm(u(1, :))^2); 
+
+res(1:N+1, :) = v;
+res(N+2:2*N+2, :) = S(v, N, d);
+res(2*N+3, :) = zeros(1, d);
+res(2*N+3, 1) = 0.5*nu*norm2(mult(u, B));
+
+res = res + mult(u, B);
+
 
 end

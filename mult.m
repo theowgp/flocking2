@@ -1,9 +1,11 @@
-function res = mult(b, A, N, d)
+function res = mult(b, A)
 
-res = zeros(N+2,d);
-for i=1:N+2
-    temp = zeros(1,d);
-    for j=1:N+2
+[n, m] = size(b); 
+
+res = zeros(n, m);
+for i=1:n
+    temp = zeros(1,m);
+    for j=1:n
         temp = temp + b(j,:)*A(:,:, j, i);
     end
     res(i,:) = temp;

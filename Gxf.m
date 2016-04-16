@@ -1,14 +1,19 @@
-function res = Gxf(x, u, N, d)
+function res = Gxf(X, u, N, d)
+x = X(1:N+1, :);
+v = X(N+2:2*N+2, :);
+xbar = X(2*N+3, 1);
    
-res = zeros(d, d, N+2, N+2);
+res = zeros(d, d, 2*N+3, 2*N+3);
 
+
+res(:, :, N+2:2*N+2, N+2:2*N+2) = GS(v, N, d);
+
+temp = zeros(d, d, N+1, N+1);
 for i=1:N+1
-    res(:, :, i, i) = 0.5*eye(d);
+    temp(:, :, i, i) = eye(d, d);
 end
 
-for j=1:N+1
-    res(1, :, N+2, j) = 2*x(j, :);
-end
+res(:, :, 1:N+1, N+2:2*N+2) = temp;
 
 end
 

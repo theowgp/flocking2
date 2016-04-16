@@ -1,10 +1,14 @@
-function res = Guf(x, u, N, d)
-   
-res = zeros(d, d, N+2, N+2);
-res(:, :, 1, 1) = eye(d,d);
+function res = Guf(X, u, N, d)
 
+global nu B;
 
-res(1, :, N+2, 1) = u(1, :);
+res = B;
+
+temp = nu*mult(u, B);
+
+for i=1:2*N+3
+    res(1, :, 2*N+3, i) = temp(i, :);
+end
 
 end
 
