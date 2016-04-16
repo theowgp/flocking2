@@ -3,7 +3,7 @@ clear variables
 N=0;
 d=1;
 
-grid = Grid(1, 10);
+grid = Grid(1, 100);
 
 x0 = ones(N+2,d);
 x0(N+2, 1) = 0;
