@@ -1,0 +1,23 @@
+classdef Grid
+        
+    properties
+         h;
+         T1;
+         
+         n;
+         t;
+         
+    end
+    
+    methods
+        function obj = Grid(T1, T2, n)
+            obj.T = T1;
+            obj.T = T2;
+            obj.n = n;
+            obj.h = (T1-T2)/n;
+            obj.t = T1:obj.h:T2;
+        end
+    end
+    
+end
+

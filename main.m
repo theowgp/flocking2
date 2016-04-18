@@ -1,6 +1,6 @@
 clear variables
 
-N = 2;
+N = 1;
 d = 2;
 
 globalvariables;
@@ -8,9 +8,12 @@ global B;
 B = zeros(d, d, 2*N+3, 2*N+3);
 B(:, :, N+2, N+2) = eye(d, d);
 
-T = 0.4;
-n = 10;
-mesh = Grid(T, n);
+T = 2;
+deltat = 0.2;
+windows = 0:deltat:T;
+nw = length(windows);
+n = 16;
+
 
 X0 = zeros(2*N+3, d);
 %initial position
@@ -34,68 +37,73 @@ X0(2*N+3, :) = zeros(1, d);
 A = [0 0 0; 0.5 0 0; -1 2 0];
 b = [1.0/6.0    2.0/3.0    1.0/6.0];
 s = 3;
-rk = RungeKutta(mesh, A, b, s, X0, N, d);
 
 
-solu0 = zeros(2*N+3, d, mesh.n, rk.s);
+solu0 = zeros(2*N+3, d, n, s);
 
 
 
 
 eps = 0.000001;
 sigma = 0.001;
-% sigma = 1;
-limitLS = 5000;
+limitLS = 500;
 limitA = 8;
-% [solx, solu] = StepestDescent(rk, mesh, N, d, solu0, eps, sigma, limitLS, limitA);
-[solx, solu] = NCG(rk, mesh, N, d, solu0, eps, sigma, limitLS, limitA);
 
 
+
+%%
+state = zeros(2*N+3, d, n+1, nw-1);
+control = zeros(2*N+3, d, n, s, nw-1);
+
+
+meshes(1) = Grid(windows(1), windows(2), n);
+rk = RungeKutta(meshes(1), A, b, s, X0, N, d);
+[state(:, :, :, 1), control(:, :, :, :, 1)] = NCG(rk, meshes(1), N, d, solu0, eps, sigma, limitLS, limitA);
+
+for i=2:nw-1
+    meshes(i) = Grid(windows(i), windows(i+1), n);
+    rk = RungeKutta(meshes(i), A, b, s, state(:, :, n+1, i-1), N, d);
+%     [state(:, :, :, i), control(:, :, :, :, i)] = NCG(rk, meshes(i), N, d, control(:, :, :, :, i-1), eps, sigma, limitLS, limitA);
+    [state(:, :, :, i), control(:, :, :, :, i)] = NCG(rk, meshes(i), N, d, solu0, eps, sigma, limitLS, limitA);
+end
+
+
+
+
+
+%%
 if d==1
     %PLOT THE TRAJECTORY OF THE LEADER AND OTHERS(1D)
     figure
-    for i=1:N+1
-        plot(mesh.t, reshape(solx(i,1,:), mesh.n+1, 1));
-        hold all
+    for j = 1:nw-1
+        for i=1:N+1
+            plot(mesh.t, reshape(state(i,1,:,j), n+1, 1));
+            hold all
+        end
     end
 else
     if d==2 
 
         %PLOT THE TRAJECTORY OF THE LEADER AND OTHERS(2D)
         figure
-        for i=1:N+1
-            plot(reshape(solx(i,1,:), mesh.n+1, 1), reshape(solx(i,2,:), mesh.n+1, 1));
-            hold all
+        for j = 1:nw-1
+            for i=1:N+1
+                plot(reshape(state(i,1,:,j), n+1, 1), reshape(state(i,2,:, j), n+1, 1));
+                hold all
+            end
         end
     else
 
         %PLOT THE TRAJECTORY OF THE LEADER AND OTHERS(3D)
         figure
-        for i=1:N+1
-            plot3(reshape(solx(i,1,:), mesh.n+1, 1), reshape(solx(i,2,:), mesh.n+1, 1), reshape(solx(i,3,:), mesh.n+1, 1));
-            grid on
-            hold all
+        for j = 1:nw-1
+            for i=1:N+1
+                plot3(reshape(state(i,1,:,j), n+1, 1), reshape(state(i,2,:,j), n+1, 1), reshape(state(i,3,:,j), n+1, 1));
+                grid on
+                hold all
+            end
         end
     end
 end
 
 
-% %PLOT THE TRAJECTORY COMPONENTS AGAINST TIME
-% % first componetn
-% figure
-% for i=1:N+1
-%     plot(grid.t, reshape(solx(i,1,:), mesh.n+1, 1));
-%     hold all
-% end
-% % second component
-% figure
-% for i=1:N+1
-%     plot(grid.t, reshape(solx(i,2,:), mesh.n+1, 1));
-%     hold all
-% end
-% % third component
-% figure
-% for i=1:N+1
-%     plot(grid.t, reshape(solx(i,3,:), mesh.n+1, 1));
-%     hold all
-% end
