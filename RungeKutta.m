@@ -8,7 +8,7 @@ classdef RungeKutta
         N;
         d;
         
-        x0;
+        X0;
         solx;
         soly;
         
@@ -19,14 +19,14 @@ classdef RungeKutta
     methods
         
         
-        function obj = RungeKutta(grid, A, b, s, x0, N, d)
+        function obj = RungeKutta(grid, A, b, s, X0, N, d)
             obj.grid = grid;
             obj.A = A;
             obj.b = b;
             obj.s = s;
             obj.N = N;            
             obj.d = d;
-            obj.x0 = x0;
+            obj.X0 = X0;
             
 %             obj.solx = zeros(N, d, grid.n+1);
 %             obj.solx(:, :, 1) = x0;
@@ -42,7 +42,7 @@ classdef RungeKutta
         
         function [solx, soly] = solve_forward_equation(obj, solu)
             solx = zeros(2*obj.N+3, obj.d, obj.grid.n+1);
-            solx(:, :, 1) = obj.x0;
+            solx(:, :, 1) = obj.X0;
             soly = zeros(2*obj.N+3, obj.d, obj.grid.n, obj.s);
 
             
