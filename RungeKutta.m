@@ -68,7 +68,7 @@ classdef RungeKutta
             solp = zeros(2*obj.N+3, obj.d, obj.grid.n+1);
             solp(:, :, obj.grid.n+1) = -Gxphi(obj.solx(:, :, obj.grid.n+1), obj.grid.T, obj.N, obj.d);
 %             solp(:, :, obj.grid.n+1) = Gxphi(obj.solx(:, :, obj.grid.n+1), obj.grid.T, obj.N, obj.d); % Haager   
-            solkhi = zeros(3*obj.N+3, obj.d, obj.grid.n, obj.s);
+            solkhi = zeros(2*obj.N+3, obj.d, obj.grid.n, obj.s);
 
            for k=obj.grid.n:-1:1
                 solp(:, :, k) = solp(:, :, k+1);

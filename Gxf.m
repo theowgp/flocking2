@@ -15,5 +15,12 @@ end
 
 res(:, :, 1:N+1, N+2:2*N+2) = temp;
 
+res(:, :, N+2:2*N+2, 1:N+1) = GxM(x, N, d) + GxL(x, N, d);
+
+temp = Gl1(x, N, d);
+for i=1:1*N+1
+    res(1, :, 2*N+3, i) = temp(i, :);
+end
+
 end
 
