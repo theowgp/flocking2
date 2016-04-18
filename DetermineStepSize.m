@@ -10,7 +10,7 @@ while phi(solxA, N, d, grid)> phi(rk.solx, N, d, grid) - sigma*s*spsolu(g, g, N,
     [solxA, solyA] = rk.solve_forward_equation(solu - s*g);
     kA = kA +1;
 end
-kA
+kA;
 
 res = s;
 end

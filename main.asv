@@ -3,7 +3,7 @@ clear variables
 N=0;
 d=1;
 
-grid = Grid(1, 100);
+grid = Grid(1, 10);
 
 x0 = ones(N+2,d);
 x0(N+2, 1) = 0;
@@ -48,8 +48,8 @@ sigma = 0.01;
 % sigma = 1;
 limitLS = 10000;
 limitA = 8;
-% [solx, solu] = StepestDescent(rk, grid, N, d, solu0, eps, sigma, limitLS, limitA);
-[solx, solu] = NCG(rk, grid, N, d, solu0, eps, sigma, limitLS, limitA);
+[solx, solu] = StepestDescent(rk, grid, N, d, solu0, eps, sigma, limitLS, limitA);
+% [solx, solu] = NCG(rk, grid, N, d, solu0, eps, sigma, limitLS, limitA);
 
 ControlL2Error = ControlL2Error(solu, grid)
 
