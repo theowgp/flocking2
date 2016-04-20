@@ -11,7 +11,7 @@ B(:, :, N+2, N+2) = eye(d, d);
 global T;
 T = 0.4;
 
-deltat = T;
+deltat = T/4;
 windows = 0:deltat:T;
 nw = length(windows);
 n = 10;
@@ -48,7 +48,7 @@ solu0 = zeros(2*N+3, d, n, s);
 
 eps = 0.000001;
 sigma = 0.001;
-limitLS = 5000;
+limitLS = 100;
 limitA = 8;
 
 
@@ -73,13 +73,15 @@ end
 
 
 %% plot the desired trajectory
-for i=1:n+1
-    temp = xxdes(meshes(1).t(i), d);
-    V(i) = temp(1);
-    W(i) = temp(2);
+for j=1:nw-1
+    for i=1:n+1
+        temp = xxdes(meshes(j).t(i), d);
+        V(i) = temp(1);
+        W(i) = temp(2);
+    end
+    plot(V, W);
+    hold all
 end
-plot(V, W);
-hold all
 %%
 if d==1
     %PLOT THE TRAJECTORY OF THE LEADER AND OTHERS(1D)
@@ -114,5 +116,3 @@ else
         end
     end
 end
-
-

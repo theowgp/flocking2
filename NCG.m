@@ -24,7 +24,7 @@ while normsolu(g, N, d, grid)>eps && kLS<limitLS
     
     Gradient = normsolu(g, N, d, grid);
     Phi = phi(rk.solx(:, :, grid.n+1), grid.T, N, d);
-    disp([kLS, Phi, Gradient]);
+%     disp([kLS, Phi, Gradient]);
 end
 Gradient = normsolu(g, N, d, grid)
 Phi = phi(rk.solx(:, :, grid.n+1), grid.T, N, d)
