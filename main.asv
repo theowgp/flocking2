@@ -72,14 +72,7 @@ end
 
 
 
-%% plot the desired trajectory
-for i=1:n+1
-    temp = xxdes(meshes(1).t(i), d);
-    V(i) = temp(1);
-    W(i) = temp(2);
-end
-plot(V, W);
-hold all
+
 %%
 if d==1
     %PLOT THE TRAJECTORY OF THE LEADER AND OTHERS(1D)
@@ -94,7 +87,7 @@ else
     if d==2 
 
         %PLOT THE TRAJECTORY OF THE LEADER AND OTHERS(2D)
-        %figure
+        figure
         for j = 1:nw-1
             for i=1:N+1
                 plot(reshape(state(i,1,:,j), n+1, 1), reshape(state(i,2,:, j), n+1, 1));
