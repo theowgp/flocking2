@@ -1,11 +1,13 @@
 %set global variables
-global mu nu;
+global mu nu eta;
 global Ca la Cr lr;
 global Ca0 la0 Cr0 lr0;
 global gamma1 
 global gamma sigma;
 global alpha beta;
 global delta1 delta2;
+
+
 
 delta1 = cos(1.047);
 delta2 = cos(1.57);
@@ -45,3 +47,4 @@ lr0=0.5;
 
 mu=0.5;
 nu=0.001;
+eta=1;

@@ -82,7 +82,7 @@ classdef RungeKutta
                         solkhi(:, :, k, i) = solkhi(:, :, k, i) + obj.grid.h*obj.A(j, i)*obj.b(j)/obj.b(i)*mult(solkhi(:, :, k, j), Gxf(obj.grid.tfine(k, j), obj.soly(:, :, k, j), solu(:, :, k, j),  obj.N, obj.d));
                        end
                    end
-                   solp(:, :, k) = solp(:, :, k) + obj.grid.h*obj.b(i)*mult(solkhi(:, :, k, i), Gxf(obj.grid.tfine(k, i), obj.soly(:, :, k, i), solu(:, :, k, i),  obj.N, obj.d));
+                   solp(:, :, k) = solp(:, :, k) + obj.grid.h*obj.b(i)*mult(solkhi(:, :, k, i), Gxf(obj.soly(:, :, k, i), solu(:, :, k, i),  obj.N, obj.d));
                 end
             end
         end

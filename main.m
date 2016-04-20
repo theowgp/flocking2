@@ -1,6 +1,6 @@
 clear variables
 
-N = 1;
+N = 0;
 d = 2;
 
 globalvariables;
@@ -8,11 +8,11 @@ global B;
 B = zeros(d, d, 2*N+3, 2*N+3);
 B(:, :, N+2, N+2) = eye(d, d);
 
-T = 2;
-deltat = 0.2;
+T = 1.5;
+deltat = T;
 windows = 0:deltat:T;
 nw = length(windows);
-n = 16;
+n = 10;
 
 
 X0 = zeros(2*N+3, d);
@@ -22,7 +22,7 @@ x0 = zeros(N+1, d);
 v0 = zeros(N+1, d);
 x0(1, 1) = 0;
 v0(1, 1) = -0.5;
-v0(1, 2) = -0.2;
+% v0(1, 2) = -0.2;
 % v0(1, 3) = -1;
 for i = 2:N+1
     x0(i, 1) = x0(i-1, 1) + 1.5;
@@ -46,7 +46,7 @@ solu0 = zeros(2*N+3, d, n, s);
 
 eps = 0.000001;
 sigma = 0.001;
-limitLS = 500;
+limitLS = 5000;
 limitA = 8;
 
 
@@ -56,12 +56,12 @@ state = zeros(2*N+3, d, n+1, nw-1);
 control = zeros(2*N+3, d, n, s, nw-1);
 
 
-meshes(1) = Grid(windows(1), windows(2), n);
+meshes(1) = Grid(windows(1), windows(2), n, s);
 rk = RungeKutta(meshes(1), A, b, s, X0, N, d);
 [state(:, :, :, 1), control(:, :, :, :, 1)] = NCG(rk, meshes(1), N, d, solu0, eps, sigma, limitLS, limitA);
 
 for i=2:nw-1
-    meshes(i) = Grid(windows(i), windows(i+1), n);
+    meshes(i) = Grid(windows(i), windows(i+1), n,  s);
     rk = RungeKutta(meshes(i), A, b, s, state(:, :, n+1, i-1), N, d);
 %     [state(:, :, :, i), control(:, :, :, :, i)] = NCG(rk, meshes(i), N, d, control(:, :, :, :, i-1), eps, sigma, limitLS, limitA);
     [state(:, :, :, i), control(:, :, :, :, i)] = NCG(rk, meshes(i), N, d, solu0, eps, sigma, limitLS, limitA);
@@ -74,10 +74,10 @@ end
 %%
 if d==1
     %PLOT THE TRAJECTORY OF THE LEADER AND OTHERS(1D)
-    figure
+    %figure
     for j = 1:nw-1
         for i=1:N+1
-            plot(mesh.t, reshape(state(i,1,:,j), n+1, 1));
+            plot(meshes(j).t, reshape(state(i,1,:,j), n+1, 1));
             hold all
         end
     end

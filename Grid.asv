@@ -2,20 +2,23 @@ classdef Grid
         
     properties
          h;
-         T1;
-         
+         T0;
+         T;
          n;
          t;
+         tfine;
          
     end
     
     methods
-        function obj = Grid(T1, T2, n)
-            obj.T = T1;
-            obj.T = T2;
+        function obj = Grid(T0, T, n)
+            obj.T0 = T0;
+            obj.T = T;
             obj.n = n;
-            obj.h = (T1-T2)/n;
-            obj.t = T1:obj.h:T2;
+            obj.h = (T-T0)/n;
+            obj.t = T0:obj.h:T;
+            for i=1:n+1
+            end
         end
     end
     

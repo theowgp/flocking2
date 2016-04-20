@@ -1,9 +1,8 @@
-function res = Gxf(t, X, u, N, d)
+function res = Gxf(X, u, N, d)
 x = X(1:N+1, :);
 v = X(N+2:2*N+2, :);
 xbar = X(2*N+3, 1);
 
-global eta;
    
 res = zeros(d, d, 2*N+3, 2*N+3);
 
@@ -23,7 +22,7 @@ temp = Gl1(x, N, d);
 for i=1:1*N+1
     res(1, :, 2*N+3, i) = temp(i, :);
 end
-res(1, :, 2*N+3, 1) = res(1, :, 2*N+3, 1) + eta*(x(1,:) - xxdes(t, d));
+res(1, :, 2*N+3, 1) = res(1, :, 2*N+3, 1) + 0.5*eta*
 
 end
 
