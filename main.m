@@ -59,30 +59,7 @@ control = zeros(2*N+3, d, n, s, nw-1);
 
 
 meshes(1) = Grid(windows(1), windows(2), n, s);
-rk = Rungfunction res = GxM(x, N, d)
-
-%initialize the result
-res = zeros(d, d, N+1, N+1);
-
-
-for i=1:N+1
-    for j=1:N+1
-        if i~=j
-            res(:, :, i, j) = - dmdy(x(i,:), x(j,:), d)/(N+1);
-        else
-            temp = zeros(d, d);
-            for k=1:N+1
-                if k~=i
-                    temp = temp + dmdx(x(i,:), x(k,:), d);
-                end
-            end
-            res(:, :, i, i) = - temp/(N+1);
-        end
-    end    
-end
-
-
-endeKutta(meshes(1), A, b, s, X0, N, d);
+rk = RungeKutta(meshes(1), A, b, s, X0, N, d);
 [state(:, :, :, 1), control(:, :, :, :, 1)] = NCG(rk, meshes(1), N, d, solu0, eps, sigma, limitLS, limitA);
 
 for i=2:nw-1
