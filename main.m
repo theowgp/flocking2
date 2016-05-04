@@ -11,7 +11,7 @@ B(:, :, N+2, N+2) = eye(d, d);
 global T;
 T = 0.4;
 
-deltat = T/4;
+deltat = T;
 windows = 0:deltat:T;
 nw = length(windows);
 n = 10;
@@ -48,7 +48,7 @@ solu0 = zeros(2*N+3, d, n, s);
 
 eps = 0.000001;
 sigma = 0.001;
-limitLS = 100;
+limitLS = 1000;
 limitA = 8;
 
 
@@ -59,7 +59,30 @@ control = zeros(2*N+3, d, n, s, nw-1);
 
 
 meshes(1) = Grid(windows(1), windows(2), n, s);
-rk = RungeKutta(meshes(1), A, b, s, X0, N, d);
+rk = Rungfunction res = GxM(x, N, d)
+
+%initialize the result
+res = zeros(d, d, N+1, N+1);
+
+
+for i=1:N+1
+    for j=1:N+1
+        if i~=j
+            res(:, :, i, j) = - dmdy(x(i,:), x(j,:), d)/(N+1);
+        else
+            temp = zeros(d, d);
+            for k=1:N+1
+                if k~=i
+                    temp = temp + dmdx(x(i,:), x(k,:), d);
+                end
+            end
+            res(:, :, i, i) = - temp/(N+1);
+        end
+    end    
+end
+
+
+endeKutta(meshes(1), A, b, s, X0, N, d);
 [state(:, :, :, 1), control(:, :, :, :, 1)] = NCG(rk, meshes(1), N, d, solu0, eps, sigma, limitLS, limitA);
 
 for i=2:nw-1
